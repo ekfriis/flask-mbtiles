@@ -1,9 +1,9 @@
-import sqlite3
 from flask import Flask, g, send_file, abort, Blueprint, current_app
 from flask.ext.cache import Cache
+import os
+import sqlite3
 
 try:
-    raise ImportError
     from cStringIO import StringIO
 except ImportError:
     from StringIO import StringIO  # NOQA
@@ -37,8 +37,11 @@ def query_tile(zoom, column, row):
     if not results:
         abort(404)
     the_image = results[0][0]
-    print 'doot', current_app.config['TESTING']
-    return send_file(StringIO(the_image), mimetype='image/png')
+    #return send_file(StringIO(the_image), mimetype='image/png')
+    return current_app.response_class(
+        StringIO(the_image).read(),
+        mimetype='image/png'
+    )
 
 
 def create_app(mbtiles=None, cache_config=None):
@@ -52,16 +55,15 @@ def create_app(mbtiles=None, cache_config=None):
         'MBTILES_PATH': mbtiles
     })
     app.register_blueprint(frontend)
-    print cache_config
     cache.init_app(app, config=cache_config)
     return app
 
 
 if __name__ == "__main__":
     app = create_app(
-        mbtiles='/Users/friis/Documents/Traffik.mbtiles',
+        mbtiles=os.environ['MBTILES_PATH'],
         cache_config={
-            'CACHE_TYPE': 'simple',
+            'CACHE_TYPE': os.environ['CACHE_TYPE'],
         }
     )
     app.run(debug=True, port=41815)
