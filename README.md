@@ -18,8 +18,7 @@ You can use the built-in Flask http server to test things locally.  Set the
 python flask-mbtiles.py
 ```
 
-You can then browse tiles on
-```http://localhost:41815/{zoom}/{column}/{row}.png```.
+You can then browse tiles on http://localhost:41815/{zoom}/{column}/{row}.png.
 
 
 In Production
