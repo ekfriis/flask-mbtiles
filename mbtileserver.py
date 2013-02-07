@@ -1,3 +1,20 @@
+"""
+
+mbtileserver.py
+===============
+
+A minimal Flask application for serving map tiles from an MBTiles file.
+
+Quick Usage:
+
+    MBTILES_PATH=/path/to/my.mbtiles python mbtileserver.py
+
+Copyright 2013 Evan Friis
+
+License: MIT
+
+"""
+
 from flask import Flask, g, abort, Blueprint, current_app
 from flask.ext.cache import Cache
 import os
@@ -62,7 +79,7 @@ if __name__ == "__main__":
     app = create_app(
         mbtiles=os.environ['MBTILES_PATH'],
         cache_config={
-            'CACHE_TYPE': os.environ['CACHE_TYPE'],
+            'CACHE_TYPE': 'simple',
         }
     )
-    app.run(debug=True, port=41815)
+    app.run(debug=True, port=os.environ.get('MBTILES_PORT', 41815))
