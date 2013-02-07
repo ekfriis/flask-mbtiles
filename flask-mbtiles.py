@@ -1,4 +1,4 @@
-from flask import Flask, g, send_file, abort, Blueprint, current_app
+from flask import Flask, g, abort, Blueprint, current_app
 from flask.ext.cache import Cache
 import os
 import sqlite3
@@ -37,7 +37,6 @@ def query_tile(zoom, column, row):
     if not results:
         abort(404)
     the_image = results[0][0]
-    #return send_file(StringIO(the_image), mimetype='image/png')
     return current_app.response_class(
         StringIO(the_image).read(),
         mimetype='image/png'
